@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %} Dashboard {% endblock %}
+{% block body %}
+<div class="container my-3 jumbotron">
+    <div class="card-deck mx-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Question Banks</h5>
+            <p class="card-text">From here you can manage question banks for your given subjects. You can also Add/delete questions from it.</p>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-sm btn-primary btn-lg btn-block">Manage Question Banks</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Manage Question Papers</h5>
+            <p class="card-text">From here you can manage your generated papers.</p>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-sm btn-primary btn-lg btn-block">Manage Papers</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Generate Question Paper</h5>
+            <p class="card-text">From here you can generate question papers automatically with the help of tools.</p>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-sm btn-primary btn-lg btn-block">Question Paper generator</button>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock %}

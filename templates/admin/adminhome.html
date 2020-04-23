@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %} Home: Admin {% endblock %}
+{% block body %}
+<div class="container my-3" style="background-color: lightsteelblue;">
+    <div class="card-deck mx-3">
+        <div class="card border-success my-3">
+            <div class="card-header">Subject Allocation</div>
+            <div class="card-body ">
+                <h5 class="card-title text-success">Allocate Subject to the Faculties</h5>
+                <p class="card-text">From here, you can allocate the different subjects to their appropriate faculties.
+                </p>
+
+            </div>
+            <div class="card-footer">
+                <button type="button" onclick="window.location.href = 'allocatesubject/'"
+                    class="btn btn-sm btn-primary btn-lg btn-block">Allocate Subject</button>
+            </div>
+        </div>
+
+        <div class="card border-success my-3">
+            <div class="card-header">Subjects Management</div>
+            <div class="card-body ">
+                <h5 class="card-title text-success">Add/Remove Subjects</h5>
+                <p class="card-text">From here, you can add or remove the subjects as per the updation of course.</p>
+                
+            </div>
+            <div class="card-footer">
+                <button type="button" onclick="window.location.href = 'subjectmanager/'"
+                    class="btn btn-sm btn-primary btn-lg btn-block ">Add/Remove Subject</button>
+            </div>
+        </div>
+        <div class="card border-success my-3">
+            <div class="card-header">Subject Allocation</div>
+            <div class="card-body ">
+                <h5 class="card-title text-success">Allocate Subject to the Faculties</h5>
+                <p class="card-text">From here, you can allocate the different subjects to their appropriate
+                    faculties.</p>
+            </div>
+            <div class="card-footer">
+                <button type="button" onclick="window.location.href = 'allocatesubject/'"
+                    class="btn btn-sm btn-primary btn-lg btn-block">Allocate Subject</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

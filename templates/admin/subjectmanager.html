@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %} Admin: Subject Manager {% endblock %}
+{% block body %}
+<div class="container mt-3 jumbotron">
+  <a href="/adminhome/"><i class='far fa-arrow-alt-circle-left mb-3' style='font-size:24px;color:gray'> Go To Home Page</i></a>
+  <h4>Add Subjects</h4>
+  <hr>
+  <form action="/adminhome/subjectmanager/" method="POST"> {% csrf_token %}
+    <div class="row">
+      <div class="col-md-3">
+        <label for="subjectcode">Subject Code</label>
+        <input type="text" class="form-control" id="subjectcode" required name="subjectcode"> 
+      </div>
+      <div class="col md-8">
+        <label for="subjectname/=">Subject Name</label>
+        <input type="text" class="form-control" id="subjectname" required name="subjectname">
+      </div>
+      <div class="col-md-2">
+        <label for="sem">Sem</label>
+        <input type="number" max="10" min="1" class="form-control" id="sem" required name="sem"> 
+      </div>
+    </div>
+    <button type="submit" class="btn btn-info mt-3">Submit</button>
+  </form>
+</div>
+<table class="table mt-3 container">
+  <thead class="text-info">
+    <tr>
+      <th scope="col">Sr.no</th>
+      <th scope="col">Subject Code</th>
+      <th scope="col">Subject Name</th>
+      <th scope="col">Sem</th>
+      <th scope="col">Faculty</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in obj %}
+    <tr id={{forloop.counter}}>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{ item.subject_code }}</td>
+      <td>{{ item.subject_name }}</td>
+      <td>{{ item.sem }}</td>
+      <td>{{ item.faculty }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

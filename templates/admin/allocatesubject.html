@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %} Admin: Allocate Subject {% endblock %}
+{% block body %}
+<div id="savemsg"></div>
+<div class="container mt-3 jumbotron">
+    <a href="/adminhome/"><i class='far fa-arrow-alt-circle-left mb-3' style='font-size:24px;color:gray'> Go To Home Page</i></a>
+    <table class="table mt-3">
+        <thead class="text-info">
+            <tr>
+                <th scope="col">Sr.no</th>
+                <th scope="col">Subject Code</th>
+                <th scope="col">Subject Name</th>
+                <th scope="col">Faculty</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in obj %}
+            <tr id={{forloop.counter}}>
+                <th scope="row">{{forloop.counter}}</th>
+                <td name={{item.subject_code}}>{{ item.subject_code }}</td>
+                <td>{{ item.subject_name }}</td>
+                <td>
+                    <div class="form-group">
+                        <select id="inputState" class="form-control " onchange="demo({{forloop.counter}})">
+                            {% if item.faculty == "" %}
+                            <option disabled selected>Choose...</option>
+                            {% else %}
+                            <option selected>{{item.faculty}}</option>
+                            {% endif %}
+                            {% for name in faculty %}
+                            <option value={{ name.first_name }}>{{ name.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% csrf_token %}
+<script>
+    let x = "";
+    let sub = "";
+    let faculty = "";
+    function demo(data) {
+        x = document.getElementById(data);
+        console.log(x.children[1]);
+        sub = x.children[1].innerText;
+        faculty = x.children[3].firstElementChild.firstElementChild.value;
+        console.log(faculty.value);
+
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/adminhome/allocatefaculty/', true);
+        xhr.onload = function () {
+            if (this.status === 200) {
+                console.log(this.responseText)
+                let subname = x.children[2].innerText;
+                let msg = document.getElementById("savemsg")
+                let str = `<div class="alert alert-success" id="msg" role="alert">
+                        ${subname} is  allocated to ${faculty} 
+                        </div>`;
+                msg.innerHTML = str;
+            }
+            else {
+                console.log("Some error occured")
+            }
+        }
+        //xhr.getResponseHeader('Content-type', 'application/json');
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        params = { "code": sub, "fac": faculty };
+        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        xhr.send(JSON.stringify(params));
+    }
+    
+</script>
+
+
+{% endblock %}
