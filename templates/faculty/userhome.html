@@ -8,8 +8,19 @@
             <h5 class="card-title">Question Banks</h5>
             <p class="card-text">From here you can manage question banks for your given subjects. You can also Add/delete questions from it.</p>
           </div>
-          <div class="card-footer">
-            <button type="button" class="btn btn-sm btn-primary btn-lg btn-block">Manage Question Banks</button>
+          <div class="card-footer"><!--
+            <button type="button" class="btn btn-sm btn-primary btn-lg btn-block"
+            onclick="window.location.href = '/home/{{request.user.username}}/managequestionbank/'">Manage Question Banks</button>-->
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle btn-sm btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Choose Subject:
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% for name in subjects %}
+                <a class="dropdown-item" href="/home/{{request.user.username}}/{{name.subject_code}}">{{ name.subject_name }}</a>
+                {% endfor %}
+              </div>
+            </div>
           </div>
         </div>
         <div class="card">

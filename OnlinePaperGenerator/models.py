@@ -6,7 +6,18 @@ class subject(models.Model):
     subject_code = models.IntegerField(primary_key=True)
     subject_name = models.CharField(max_length=100)
     sem = models.IntegerField()
-    faculty = models.CharField(max_length=50, null=True, blank=True)
+    faculty = models.CharField(max_length=50,null=True, blank=True)
 
     def __str__(self):
         return self.subject_name
+
+class questionbank(models.Model):
+    subject_code = models.IntegerField(default=0)
+    chapterno = models.IntegerField(default=0)
+    marks = models.IntegerField(default=0)
+    difficulty = models.CharField(max_length = 10)
+    content = models.CharField(max_length = 500)
+
+    def __str__(self):
+        return self.content
+

@@ -11,4 +11,5 @@ urlpatterns = [
     path('adminhome/allocatefaculty/', views.allocatefaculty, name="allocatefaculty"),
     path('adminhome/subjectmanager/', views.subjectmanager, name="subjectmanager"),
     path('home/<str:uname>/', views.home, name="userhome"),
+    path('home/<str:uname>/<int:subcode>/', views.managequestionbank, name="managequestionbank"),
 ]

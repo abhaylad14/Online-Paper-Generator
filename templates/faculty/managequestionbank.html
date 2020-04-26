@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %} Question bank {% endblock %}
+{% block body %}
+<div class="container jumbotron my-3">
+    <form action="/home/{{request.user.username}}/{{subjectcode}}/" method="POST">{% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="chapterno">Chapter No.</label>
+                <input type="number" min="1" max="20" class="form-control" id="chapterno" name="chapterno" required
+                    placeholder="Enter chapter no.">
+            </div>
+            <div class="form-group col">
+                <label for="selectmarks">Marks</label>
+                <select id="selectmarks" class="form-control" name="selectmarks" required>
+                    <option selected disabled>Choose...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="form-group col">
+                <label for="selectdifficulty">Difficulty level</label>
+                <select id="selectdifficulty" class="form-control" name="selectdifficulty" required>
+                    <option selected disabled>Choose...</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group mt-2 ">
+            <textarea class="form-control" id="question" rows="2" placeholder="Type Question here" required
+                name="question"></textarea>
+        </div>
+        <button type="submit" class="btn btn-outline-success">Add Question</button>
+    </form>
+    <div class="accordion mt-3" id="accordionExample">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-block" type="button" data-toggle="collapse" data-target="#mark1"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        1 Mark Questions
+                    </button>
+                </h2>
+            </div>
+
+            <div id="mark1" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">srno.</th>
+                                <th scope="col">Chapter</th>
+                                <th scope="col">Question</th>
+                                <th scope="col">Difficulty</th>
+                            </tr>
+                        </thead>
+                        <tbody id="1markquestions">
+
+                            {% for items in mark1 %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{items.chapterno}}</td>
+                                <td>{{items.content}}</td>
+                                <td>{{items.difficulty}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h2 class="mb-0">
+                    <button class="btn btn-block collapsed" type="button" data-toggle="collapse" data-target="#mark2"
+                        aria-expanded="false" aria-controls="collapseTwo">
+                        2 Mark Questions
+                    </button>
+                </h2>
+            </div>
+            <div id="mark2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">srno.</th>
+                                <th scope="col">Chapter</th>
+                                <th scope="col">Question</th>
+                                <th scope="col">Difficulty</th>
+                            </tr>
+                        </thead>
+                        <tbody id="2markquestions">
+
+                            {% for items in mark2 %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{items.chapterno}}</td>
+                                <td>{{items.content}}</td>
+                                <td>{{items.difficulty}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h2 class="mb-0">
+                    <button class="btn btn-block collapsed" type="button" data-toggle="collapse" data-target="#mark5"
+                        aria-expanded="false" aria-controls="collapseThree">
+                        5 Mark Questions
+                    </button>
+                </h2>
+            </div>
+            <div id="mark5" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">srno.</th>
+                                <th scope="col">Chapter</th>
+                                <th scope="col">Question</th>
+                                <th scope="col">Difficulty</th>
+                            </tr>
+                        </thead>
+                        <tbody id="5markquestions">
+
+                            {% for items in mark5 %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{items.chapterno}}</td>
+                                <td>{{items.content}}</td>
+                                <td>{{items.difficulty}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

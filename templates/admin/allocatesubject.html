@@ -27,9 +27,13 @@
                             {% else %}
                             <option selected>{{item.faculty}}</option>
                             {% endif %}
+                            {% with temp=item.faculty %}
                             {% for name in faculty %}
-                            <option value={{ name.first_name }}>{{ name.first_name }}</option>
+                            {% if temp != name.username and name.id != 1 %}
+                            <option value={{ name.username }}>{{ name.username }}</option>
+                            {% endif %}
                             {% endfor %}
+                            {% endwith %}
                         </select>
                     </div>
                 </td>
@@ -48,7 +52,7 @@
         console.log(x.children[1]);
         sub = x.children[1].innerText;
         faculty = x.children[3].firstElementChild.firstElementChild.value;
-        console.log(faculty.value);
+        console.log(faculty.username);
 
 
         const xhr = new XMLHttpRequest();

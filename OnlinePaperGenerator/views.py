@@ -145,63 +145,111 @@ def handlelogout(request):
 
 #Home page for the admin
 def adminhome(request):
-    return render(request,"admin/adminhome.html")
+    if request.user.is_superuser:
+        return render(request,"admin/adminhome.html")
+    else:
+        return HttpResponse("Error 404: page not found")
 
 #subject allocation
 def allocatesubject(request):
-    sub = subject.objects.all()
-    fac = User.objects.all()
-    params = {
-        "obj": sub,
-        "faculty": fac
-        }
-    return render(request, "admin/allocatesubject.html",params)
+    if request.user.is_superuser:
+        sub = subject.objects.all()
+        fac = User.objects.all()
+        params = {
+            "obj": sub,
+            "faculty": fac
+            }
+        return render(request, "admin/allocatesubject.html",params)
+    else:
+        return HttpResponse("error 404: page not found")
 
 #faculty allocation to a particular subject by AJAX
 def allocatefaculty(request):
-    if request.method == "POST":
-        #data received from web in the form of JSON
-        #So we decode the JSON
-        form_data = json.loads(request.body.decode())
-        subjectcode = form_data["code"]
-        subfaculty = form_data["fac"]
-        obj = subject.objects.get(subject_code = subjectcode)
-        subname = obj.subject_name
-        obj.faculty = subfaculty
-        obj.save()
-        return HttpResponse("")
-
-    return redirect("allocatesubject")
+    if request.user.is_superuser:
+        if request.method == "POST":
+            #data received from web in the form of JSON
+            #So we decode the JSON
+            form_data = json.loads(request.body.decode())
+            subjectcode = form_data["code"]
+            subfaculty = form_data["fac"]
+            obj = subject.objects.get(subject_code = subjectcode)
+            subname = obj.subject_name
+            obj.faculty = subfaculty
+            obj.save()
+            return HttpResponse("")
+        return redirect("allocatesubject")
+    else:
+        return HttpResponse("error 404: page not found")
 
 #Add/Remove Subjects
 def subjectmanager(request):
-    sub = subject.objects.all()
-    fac = User.objects.all()
-    params = {
-        "obj": sub,
-        "faculty": fac
-        }
-    #Receive data from the web
-    if request.method == "POST":
-        subcode = request.POST["subjectcode"]
-        subname = request.POST["subjectname"]
-        sem = request.POST["sem"]
-        print(subcode, subname, sem)
-        temp = subject.objects.filter(subject_code = subcode)
-        obj = subject(subject_code = subcode, subject_name = subname, sem = sem)
-        if len(temp) == 0:
-            obj.save()
-            messages.success(request, subname + " saved")
-        else:
-            messages.error(request, subname + " is already present")
+    if request.user.is_superuser:
+        sub = subject.objects.all()
+        fac = User.objects.all()
+        params = {
+            "obj": sub,
+            "faculty": fac
+            }
+        #Receive data from the web
+        if request.method == "POST":
+            subcode = request.POST["subjectcode"]
+            subname = request.POST["subjectname"]
+            sem = request.POST["sem"]
+            print(subcode, subname, sem)
+            temp = subject.objects.filter(subject_code = subcode)
+            obj = subject(subject_code = subcode, subject_name = subname, sem = sem)
+            if len(temp) == 0:
+                obj.save()
+                messages.success(request, subname + " saved")
+            else:
+                messages.error(request, subname + " is already present")
 
-    return render(request, "admin/subjectmanager.html",params)
+        return render(request, "admin/subjectmanager.html",params)
+    else:
+        return HttpResponse("error 404: page not found")
 
 #home page for the faculties
 def home(request, uname):
-    #redirecting faculties to their specific homepage   
+    #redirecting faculties to their specific homepage and admin to adminpage  
     temp = User.objects.get(username = request.user.username)
     if temp.username == uname:
-        return render(request, "faculty/userhome.html")
+        if request.user.is_superuser:
+            return render(request,"admin/adminhome.html")
+        else:
+            if request.user.is_authenticated:
+                sub = subject.objects.filter(faculty = uname)
+                params = {
+                    "subjects" : sub,
+                }
+                return render(request, "faculty/userhome.html",params)
+            else:
+                return HttpResponse("error 404: page not found")
     else: 
         return HttpResponse("error")
+
+#manage Question banks
+def managequestionbank(request,uname,subcode):
+    temp = User.objects.get(username = request.user.username)
+    if temp.username == uname:
+        if request.method == "POST":
+            chno = request.POST['chapterno']
+            marks = request.POST['selectmarks']
+            diff = request.POST['selectdifficulty']
+            question = request.POST['question']
+            print(chno,marks,diff,question)
+            if len(question) > 5:
+                myobj = questionbank(subject_code = subcode, chapterno = chno, marks = marks , difficulty = diff, content = question)
+                myobj.save()
+            return redirect('managequestionbank',uname,subcode)
+
+        mark1 = questionbank.objects.filter(subject_code = subcode,marks = 1)
+        mark2 = questionbank.objects.filter(subject_code = subcode,marks = 2)
+        mark5 = questionbank.objects.filter(subject_code = subcode,marks = 5)
+        
+        params = {
+            "subjectcode" : subcode,
+            "mark1" : mark1,
+            "mark2" : mark2,
+            "mark5" : mark5,
+        }
+        return render(request, "faculty/managequestionbank.html",params)
