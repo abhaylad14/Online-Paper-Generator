@@ -49,13 +49,13 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-           {{request.user.first_name}}
+          {{request.user.first_name}}
         </a>
         <div class="dropdown-menu" style="margin: 0px 0px 0px -80px;" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="#">Action</a>
           <a class="dropdown-item" href="#">Another action</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/handlelogout/">Logout</a>
+          <a class="dropdown-item" id="logout" href="/handlelogout/">Logout</a>
         </div>
       </li>
     </ul>
@@ -129,8 +129,12 @@
           <form action="registeration/" method="POST"> {% csrf_token %}
             <div class="form-group">
               <label for="uname">Enter Your User Name</label>
-              <input type="text" class="form-control" id="uname" name="uname"
-                placeholder="Username Name (must be alphanumeric max length 20)" required>
+              <input type="text" class="form-control" id="uname" name="uname" onkeyup="verifyuname()"
+                onvolumechange="empty()" placeholder="Username Name (must be alphanumeric max length 20)" required>
+              <div class="invalid-feedback" id="invalid">
+              </div>
+              <div class="valid-feedback" id="valid">
+              </div>
             </div>
             <div class="form-group">
               <label for="fname">Enter Your First Name</label>
@@ -187,6 +191,63 @@
     crossorigin="anonymous"></script>
   <script>
     setTimeout(function () { $('#spmessage').alert('close') }, 5000);
+    function verifyuname() {
+      let uname = document.getElementById("uname");
+      if(uname.value.length == 0)
+      {
+        uname.classList.remove("is-valid");
+          uname.classList.remove("is-invalid");
+          valid.innerText = "";
+          invalid.innerText = "";
+      }
+      else{
+        sendajax(uname.value);
+      }  
+    }
+
+    function sendajax(data) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'verifyusername/', true);
+      xhr.onload = function () {
+        if (this.status === 200) {
+          uname.classList.add("is-valid");
+          uname.classList.remove("is-invalid");
+          str = ` yes, This username is available`;
+          valid.innerText = str;
+          invalid.innerText = "";
+
+        }
+        else {
+          str = ` Sorry, This username is unavailable`;
+          uname.classList.remove("is-valid");
+          uname.classList.add("is-invalid");
+          invalid.innerText = str;
+          valid.innerText = "";
+        }
+      }
+      //xhr.getResponseHeader('Content-type', 'application/json');
+      var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+      params = { "uname": data };
+      xhr.setRequestHeader('X-CSRFToken', csrftoken);
+      xhr.send(JSON.stringify(params));
+    }
+    /*let invalid = document.getElementById("invalid");
+      let valid = document.getElementById("valid");
+      let str = "";
+      if (is_available == false) {
+        str = ` Sorry, This username is unavailable`;
+        uname.classList.remove("is-valid");
+        uname.classList.add("is-invalid");
+        invalid.innerText = str;
+        valid.innerText = "";
+      }
+      else if(is_available == true){
+        uname.classList.add("is-valid");
+        uname.classList.remove("is-invalid");
+        str = ` yes, This username is available`;
+        valid.innerText = str;
+        invalid.innerText = "";
+      }*/
   </script>
 </body>
 

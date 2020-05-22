@@ -11,5 +11,11 @@ urlpatterns = [
     path('adminhome/allocatefaculty/', views.allocatefaculty, name="allocatefaculty"),
     path('adminhome/subjectmanager/', views.subjectmanager, name="subjectmanager"),
     path('home/<str:uname>/', views.home, name="userhome"),
-    path('home/<str:uname>/<int:subcode>/', views.managequestionbank, name="managequestionbank"),
+    path('deletequestion/', views.deletequestion, name="deletequestion"),
+    path('deletesubject/', views.deletesubject, name="deletesubject"),
+    path('verifyusername/', views.verifyusername, name="verifyusername"),
+    path('home/papergenmenu/<str:uname>/', views.papergenmenu, name="papergenmenu"),
+    path('home/papergenmenu/unittest/<str:subcode>/<str:uname>/', views.unittest, name="unittest"),
+    path('home/<str:uname>/<str:subcode>/', views.managequestionbank, name="managequestionbank"),
 ]
+

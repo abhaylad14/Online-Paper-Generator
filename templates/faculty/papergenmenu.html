@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %} Question Paper {% endblock %}
+{% block body %}
+<div class="container my-3">
+  <h3 style="text-align: center;">Test Papers Blueprint</h3>
+    <div class="row my-3">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Unit Test: I,II</h5>
+              <p class="card-text">Total Marks: 30</p>
+              <p class="card-text">Q1: 10 Marks [A(4): 1 mark each(4), B(6): 2 mark each(3)]</p>
+              <p class="card-text">Q2: 10 Marks [A(5) or A(5), B(5) or B(5)]</p>
+              <p class="card-text">Q3: 10 Marks [A(5),B(5),C(5) (Any Two)]</p>
+
+              <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Choose Subject:
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  {% for name in subjects %}
+                  <a class="dropdown-item" href="/home/papergenmenu/unittest/{{name.subject_code}}/{{request.user.username}}">{{ name.subject_name }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Internal/External</h5>
+              <p class="card-text">Total Marks: 60</p>
+              <p class="card-text">Q1,Q4: 10 Marks [A(4): 1 mark each(4), B(6): 2 mark each(3)]</p>
+              <p class="card-text">Q2,Q5: 10 Marks [A(5) or A(5), B(5) or B(5)]</p>
+              <p class="card-text">Q3,Q6: 10 Marks [A(5),B(5),C(5) (Any Two)]</p>
+              <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Choose Subject:
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  {% for name in subjects %}
+                  <a class="dropdown-item" href="#">{{ name.subject_name }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock %}

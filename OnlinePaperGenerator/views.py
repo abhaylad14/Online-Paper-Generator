@@ -9,7 +9,7 @@ from .models import *
 import json
 
 # Create your views here.
-#home Page for welcome users 
+#home Page for website to welcome users 
 def index(request):
     return render(request, "home.html")
 
@@ -112,6 +112,19 @@ def registeration(request):
 
     return HttpResponse("Error 404: Page not found")
 
+# To verify that username is available or not
+def verifyusername(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode())
+        uname = data["uname"]
+        is_available = User.objects.filter(username=uname)
+        if len(is_available) == 0:
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=201)
+
+    return HttpResponse("done")
+
 #login Process
 def handlelogin(request):
     # Arrived data 
@@ -137,6 +150,8 @@ def handlelogin(request):
 def handlelogout(request):
     try:
         del request.session['username']
+        response = HttpResponse()
+        response['Cache-Control'] ='no-cache'
     except:
       pass
     logout(request)
@@ -208,11 +223,22 @@ def subjectmanager(request):
     else:
         return HttpResponse("error 404: page not found")
 
+#deletes the subject
+def deletesubject(request):
+    if request.method == "POST":
+        form_data = json.loads(request.body.decode())
+        subjectcode = form_data["subjectcode"]
+        obj = subject.objects.get(subject_code = subjectcode)
+        obj.delete()
+        objqb = questionbank.objects.filter(subject_code = subjectcode)
+        objqb.delete()
+        return HttpResponse("done")
+
 #home page for the faculties
 def home(request, uname):
     #redirecting faculties to their specific homepage and admin to adminpage  
-    temp = User.objects.get(username = request.user.username)
-    if temp.username == uname:
+    #temp = User.objects.get(username = request.user.username)
+    if request.session["username"] == uname:
         if request.user.is_superuser:
             return render(request,"admin/adminhome.html")
         else:
@@ -225,20 +251,20 @@ def home(request, uname):
             else:
                 return HttpResponse("error 404: page not found")
     else: 
-        return HttpResponse("error")
+        return HttpResponse("error 404: page not found")
 
 #manage Question banks
 def managequestionbank(request,uname,subcode):
-    temp = User.objects.get(username = request.user.username)
-    if temp.username == uname:
+    #temp = User.objects.get(username = request.user.username)
+    if request.session["username"] == uname:
         if request.method == "POST":
             chno = request.POST['chapterno']
             marks = request.POST['selectmarks']
             diff = request.POST['selectdifficulty']
             question = request.POST['question']
-            print(chno,marks,diff,question)
+            priority = request.POST['selectpriority']
             if len(question) > 5:
-                myobj = questionbank(subject_code = subcode, chapterno = chno, marks = marks , difficulty = diff, content = question)
+                myobj = questionbank(subject_code = subcode, chapterno = chno, marks = marks , difficulty = diff, content = question,priority=priority)
                 myobj.save()
             return redirect('managequestionbank',uname,subcode)
 
@@ -253,3 +279,31 @@ def managequestionbank(request,uname,subcode):
             "mark5" : mark5,
         }
         return render(request, "faculty/managequestionbank.html",params)
+    return HttpResponse("error 404: page not found")
+
+
+#deletes the question from the question bank
+def deletequestion(request):
+    if request.method == "POST":
+        form_data = json.loads(request.body.decode())
+        subjectcode = form_data["subjectcode"]
+        question = form_data["question"]
+        print(subjectcode,question)
+        obj = questionbank.objects.filter(subject_code = subjectcode, content = question)
+        obj.delete()
+        return HttpResponse("done")
+
+def papergenmenu(request,uname):
+    if request.session["username"] == uname:
+        sub = subject.objects.filter(faculty = uname)
+        params = {
+            "subjects" : sub,
+        }
+        return render(request,"faculty/papergenmenu.html",params)
+    #return HttpResponse("error 404: page not found")
+
+def unittest(request,subcode,uname):
+    if request.session["username"] == uname:
+        #mark1 = questionbank.objects.filter()
+        return render(request,"faculty/unittest.html")
+    return HttpResponse("error 404: page not found")
