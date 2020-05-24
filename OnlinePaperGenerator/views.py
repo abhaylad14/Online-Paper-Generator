@@ -271,7 +271,6 @@ def managequestionbank(request,uname,subcode):
         mark1 = questionbank.objects.filter(subject_code = subcode,marks = 1)
         mark2 = questionbank.objects.filter(subject_code = subcode,marks = 2)
         mark5 = questionbank.objects.filter(subject_code = subcode,marks = 5)
-        
         params = {
             "subjectcode" : subcode,
             "mark1" : mark1,
@@ -290,6 +289,7 @@ def deletequestion(request):
         question = form_data["question"]
         print(subjectcode,question)
         obj = questionbank.objects.filter(subject_code = subjectcode, content = question)
+        print(obj)
         obj.delete()
         return HttpResponse("done")
 

@@ -233,7 +233,7 @@
         }
         //xhr.getResponseHeader('Content-type', 'application/json');
         var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-        params = { "subjectcode": {{subjectcode}} , "question": que };
+        params = { "subjectcode": '{{subjectcode}}' , "question": que };
         console.log(params);
         xhr.setRequestHeader('X-CSRFToken', csrftoken);
         xhr.send(JSON.stringify(params));
