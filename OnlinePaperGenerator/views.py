@@ -263,7 +263,8 @@ def managequestionbank(request,uname,subcode):
             diff = request.POST['selectdifficulty']
             question = request.POST['question']
             priority = request.POST['selectpriority']
-            if len(question) > 5:
+            isalreadyexist = questionbank.objects.filter(marks = marks,content = question)
+            if len(question) > 5 and  isalreadyexist is None:
                 myobj = questionbank(subject_code = subcode, chapterno = chno, marks = marks , difficulty = diff, content = question,priority=priority)
                 myobj.save()
             return redirect('managequestionbank',uname,subcode)
@@ -293,6 +294,26 @@ def deletequestion(request):
         obj.delete()
         return HttpResponse("done")
 
+#edits the question from the question bank
+def editquestion(request):
+    if request.method == "POST":
+        oldque = request.POST["oldquestion"]
+        ch = request.POST["chapter"]
+        marks = request.POST["marks"]
+        diff = request.POST["difficulty"]
+        pri = request.POST["priority"]
+        newque = request.POST["question"]
+        temp = questionbank.objects.get(content = oldque)
+        temp.chapterno = ch
+        temp.marks = marks
+        temp.difficulty = diff
+        temp.content = newque
+        temp.priority = pri
+        temp.save()
+        messages.success(request,"Changes saved successfully")
+        return HttpResponse("done")
+
+# This acts as a main menu for paper generator
 def papergenmenu(request,uname):
     if request.session["username"] == uname:
         sub = subject.objects.filter(faculty = uname)

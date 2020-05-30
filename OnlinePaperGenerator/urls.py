@@ -12,6 +12,7 @@ urlpatterns = [
     path('adminhome/subjectmanager/', views.subjectmanager, name="subjectmanager"),
     path('home/<str:uname>/', views.home, name="userhome"),
     path('deletequestion/', views.deletequestion, name="deletequestion"),
+    path('editquestion/', views.editquestion, name="editquestion"),
     path('deletesubject/', views.deletesubject, name="deletesubject"),
     path('verifyusername/', views.verifyusername, name="verifyusername"),
     path('home/papergenmenu/<str:uname>/', views.papergenmenu, name="papergenmenu"),
